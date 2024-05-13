@@ -1,0 +1,1 @@
+curl -v localhost:8080/registry/employee?q=%%D1%%80

@@ -1,0 +1,28 @@
+services: 
+  web-service-1:
+    image: registry-web-1
+    container_name: registry-web-container-1
+    network_mode: bridge
+    build: 
+      dockerfile: Dockerfile.web
+      context: .
+    env_file:
+      - common.env 
+      - web.env
+    ports:
+      - "8081:8080"
+
+  bot-service-1:
+    image: registry-bot-1
+    container_name: registry-bot-container-1
+    network_mode: bridge
+    build: 
+      dockerfile: Dockerfile.bot
+      context: .
+    env_file:
+      - bot.env
+      - common.env 
+    environment:
+      - BOT_WEB_BACKEND_URL=${ENV_SPECIFIC_BOT_WEB_BACKEND_URL}
+    depends_on:
+      - web-service-1

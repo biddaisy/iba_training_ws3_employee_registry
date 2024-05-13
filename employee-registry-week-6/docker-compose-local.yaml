@@ -1,0 +1,32 @@
+services: 
+  web-service:
+    image: registry-web
+    container_name: registry-web-container
+    networks:
+      - my_bridge
+    build: 
+      dockerfile: Dockerfile.web
+      context: .
+    env_file:
+      - common.env 
+      - web.env
+
+  bot-service:
+    image: registry-bot
+    container_name: registry-bot-container
+    networks:
+      - my_bridge
+    build: 
+      dockerfile: Dockerfile.bot
+      context: .
+    env_file:
+      - bot.env
+      - common.env 
+    environment:
+      - BOT_WEB_BACKEND_URL=${ENV_SPECIFIC_BOT_WEB_BACKEND_URL}
+    depends_on:
+      - web-service
+
+networks:
+  my_bridge:
+    driver: bridge
